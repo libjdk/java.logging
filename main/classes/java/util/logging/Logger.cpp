@@ -947,7 +947,7 @@ $ResourceBundle* Logger::findResourceBundle($String* name, bool useCallersModule
 		if ($nc(lb)->userBundle != nullptr && $nc(name)->equals(lb->resourceBundleName)) {
 			return lb->userBundle;
 		} else {
-			bool var$1 = catalog != nullptr && currentLocale->equals(this->catalogLocale);
+			bool var$1 = catalog != nullptr && $nc(currentLocale)->equals(this->catalogLocale);
 			if (var$1 && name->equals(this->catalogName)) {
 				return catalog;
 			}
