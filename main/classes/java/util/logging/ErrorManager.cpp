@@ -65,6 +65,7 @@ void ErrorManager::init$() {
 
 void ErrorManager::error($String* msg, $Exception* ex, int32_t code) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if (this->reported) {
 			return;
 		}

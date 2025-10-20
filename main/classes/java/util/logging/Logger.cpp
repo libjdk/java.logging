@@ -407,6 +407,7 @@ void Logger::checkPermission() {
 
 Logger* Logger::demandLogger($String* name, $String* resourceBundleName, $Class* caller) {
 	$init(Logger);
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager, manager, $LogManager::getLogManager());
 	$init($Logger$SystemLoggerHelper);
 	if (!$Logger$SystemLoggerHelper::disableCallerCheck) {
@@ -441,6 +442,7 @@ Logger* Logger::getLogger($String* name, $String* resourceBundleName, $Class* ca
 
 Logger* Logger::getPlatformLogger($String* name) {
 	$init(Logger);
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager, manager, $LogManager::getLogManager());
 	$var(Logger, result, $nc(manager)->demandSystemLogger(name, Logger::SYSTEM_LOGGER_RB_NAME, ($Module*)nullptr));
 	return result;
@@ -454,6 +456,7 @@ Logger* Logger::getAnonymousLogger() {
 
 Logger* Logger::getAnonymousLogger($String* resourceBundleName) {
 	$init(Logger);
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager, manager, $LogManager::getLogManager());
 	$nc(manager)->drainLoggerRefQueueBounded();
 	$Class* callerClass = $Reflection::getCallerClass();
@@ -483,6 +486,7 @@ $Filter* Logger::getFilter() {
 }
 
 void Logger::log($LogRecord* record) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable($($nc(record)->getLevel()))) {
 		return;
 	}
@@ -513,6 +517,7 @@ void Logger::log($LogRecord* record) {
 }
 
 void Logger::doLog($LogRecord* lr) {
+	$useLocalCurrentObjectStackCache();
 	$nc(lr)->setLoggerName(this->name);
 	$var($Logger$LoggerBundle, lb, getEffectiveLoggerBundle());
 	$var($ResourceBundle, bundle, $nc(lb)->userBundle);
@@ -533,6 +538,7 @@ void Logger::log($Level* level, $String* msg) {
 }
 
 void Logger::log($Level* level, $Supplier* msgSupplier) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -541,6 +547,7 @@ void Logger::log($Level* level, $Supplier* msgSupplier) {
 }
 
 void Logger::log($Level* level, $String* msg, Object$* param1) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -569,6 +576,7 @@ void Logger::log($Level* level, $String* msg, $Throwable* thrown) {
 }
 
 void Logger::log($Level* level, $Throwable* thrown, $Supplier* msgSupplier) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -588,6 +596,7 @@ void Logger::logp($Level* level, $String* sourceClass, $String* sourceMethod, $S
 }
 
 void Logger::logp($Level* level, $String* sourceClass, $String* sourceMethod, $Supplier* msgSupplier) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -598,6 +607,7 @@ void Logger::logp($Level* level, $String* sourceClass, $String* sourceMethod, $S
 }
 
 void Logger::logp($Level* level, $String* sourceClass, $String* sourceMethod, $String* msg, Object$* param1) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -632,6 +642,7 @@ void Logger::logp($Level* level, $String* sourceClass, $String* sourceMethod, $S
 }
 
 void Logger::logp($Level* level, $String* sourceClass, $String* sourceMethod, $Throwable* thrown, $Supplier* msgSupplier) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -671,6 +682,7 @@ void Logger::logrb($Level* level, $String* sourceClass, $String* sourceMethod, $
 }
 
 void Logger::logrb($Level* level, $String* sourceClass, $String* sourceMethod, $String* bundleName, $String* msg, Object$* param1) {
+	$useLocalCurrentObjectStackCache();
 	if (!isLoggable(level)) {
 		return;
 	}
@@ -759,6 +771,7 @@ void Logger::entering($String* sourceClass, $String* sourceMethod, Object$* para
 }
 
 void Logger::entering($String* sourceClass, $String* sourceMethod, $ObjectArray* params) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, msg, "ENTRY"_s);
 	if (params == nullptr) {
 		$init($Level);
@@ -937,6 +950,7 @@ $ResourceBundle* Logger::catalog() {
 
 $ResourceBundle* Logger::findResourceBundle($String* name, bool useCallersModule) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$beforeCallerSensitive();
 		if (name == nullptr) {
 			return nullptr;
@@ -1012,6 +1026,7 @@ void Logger::setupResourceInfo($String* name, $Class* caller) {
 
 void Logger::setupResourceInfo($String* name, $Module* callerModule) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$var($Logger$LoggerBundle, lb, this->loggerBundle);
 		if ($nc(lb)->resourceBundleName != nullptr) {
 			if ($nc(lb->resourceBundleName)->equals(name)) {
@@ -1040,6 +1055,7 @@ void Logger::setupResourceInfo($String* name, $Module* callerModule) {
 }
 
 void Logger::setResourceBundle($ResourceBundle* bundle) {
+	$useLocalCurrentObjectStackCache();
 	checkPermission();
 	$var($String, baseName, $nc(bundle)->getBaseBundleName());
 	if (baseName == nullptr || $nc(baseName)->isEmpty()) {
@@ -1071,6 +1087,7 @@ void Logger::setParent(Logger* parent) {
 }
 
 void Logger::doSetParent(Logger* newParent) {
+	$useLocalCurrentObjectStackCache();
 	$synchronized(Logger::treeLock) {
 		$var($LogManager$LoggerWeakRef, ref, nullptr);
 		if (this->parent != nullptr) {
@@ -1101,6 +1118,7 @@ void Logger::doSetParent(Logger* newParent) {
 }
 
 void Logger::removeChildLogger($LogManager$LoggerWeakRef* child) {
+	$useLocalCurrentObjectStackCache();
 	$synchronized(Logger::treeLock) {
 		{
 			$var($Iterator, iter, $nc(this->kids)->iterator());
@@ -1116,6 +1134,7 @@ void Logger::removeChildLogger($LogManager$LoggerWeakRef* child) {
 }
 
 void Logger::updateEffectiveLevel() {
+	$useLocalCurrentObjectStackCache();
 	int32_t newLevelValue = 0;
 	$var($Logger$ConfigurationData, cfg, this->config$);
 	$var($Level, levelObject, $nc(cfg)->levelObject);
@@ -1148,6 +1167,7 @@ void Logger::updateEffectiveLevel() {
 }
 
 $Logger$LoggerBundle* Logger::getEffectiveLoggerBundle() {
+	$useLocalCurrentObjectStackCache();
 	$var($Logger$LoggerBundle, lb, this->loggerBundle);
 	if ($nc(lb)->isSystemBundle()) {
 		return Logger::SYSTEM_BUNDLE;

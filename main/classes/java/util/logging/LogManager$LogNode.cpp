@@ -80,6 +80,7 @@ void LogManager$LogNode::init$(LogManager$LogNode* parent, $LogManager$LoggerCon
 }
 
 void LogManager$LogNode::walkAndSetParent($Logger* parent) {
+	$useLocalCurrentObjectStackCache();
 	if (this->children == nullptr) {
 		return;
 	}

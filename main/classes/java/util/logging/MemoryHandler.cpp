@@ -94,6 +94,7 @@ $Object* allocate$MemoryHandler($Class* clazz) {
 }
 
 void MemoryHandler::init$() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$init($Level);
 	$Handler::init$($Level::ALL, $$new($SimpleFormatter), nullptr);
@@ -169,6 +170,7 @@ void MemoryHandler::publish($LogRecord* record) {
 
 void MemoryHandler::push() {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		for (int32_t i = 0; i < this->count; ++i) {
 			int32_t ix = $mod((this->start + i), $nc(this->buffer)->length);
 			$var($LogRecord, record, $nc(this->buffer)->get(ix));

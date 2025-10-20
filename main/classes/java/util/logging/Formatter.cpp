@@ -62,6 +62,7 @@ $String* Formatter::getTail($Handler* h) {
 }
 
 $String* Formatter::formatMessage($LogRecord* record) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, format, $nc(record)->getMessage());
 	$var($ResourceBundle, catalog, record->getResourceBundle());
 	if (catalog != nullptr) {

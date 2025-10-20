@@ -68,6 +68,7 @@ void HttpLogFormatter::init$() {
 }
 
 $String* HttpLogFormatter::format($LogRecord* record) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, sourceClassName, $nc(record)->getSourceClassName());
 	bool var$0 = sourceClassName == nullptr;
 	if (!var$0) {

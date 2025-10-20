@@ -395,6 +395,7 @@ void LogRecord::setThrown($Throwable* thrown) {
 }
 
 void LogRecord::writeObject($ObjectOutputStream* out) {
+	$useLocalCurrentObjectStackCache();
 	$var($ObjectOutputStream$PutField, pf, $nc(out)->putFields());
 	$nc(pf)->put("level"_s, $of(this->level));
 	pf->put("sequenceNumber"_s, this->sequenceNumber);
@@ -430,6 +431,7 @@ void LogRecord::writeObject($ObjectOutputStream* out) {
 }
 
 void LogRecord::readObject($ObjectInputStream* in) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($ObjectInputStream$GetField, gf, $nc(in)->readFields());
 	$set(this, level, $cast($Level, $nc(gf)->get("level"_s, ($Object*)nullptr)));
@@ -487,17 +489,20 @@ void LogRecord::readObject($ObjectInputStream* in) {
 }
 
 void LogRecord::inferCaller() {
+	$useLocalCurrentObjectStackCache();
 	this->needToInferCaller = false;
 	$var($Optional, frame, $$new($LogRecord$CallerFinder)->get());
 	$nc(frame)->ifPresent(static_cast<$Consumer*>($$new(LogRecord$$Lambda$lambda$inferCaller$0, this)));
 }
 
 void LogRecord::lambda$inferCaller$0($StackWalker$StackFrame* f) {
+	$useLocalCurrentObjectStackCache();
 	setSourceClassName($($nc(f)->getClassName()));
 	setSourceMethodName($($nc(f)->getMethodName()));
 }
 
 void clinit$LogRecord($Class* class$) {
+	$useLocalCurrentObjectStackCache();
 	$assignStatic(LogRecord::globalSequenceNumber, $new($AtomicLong));
 		$load($Level);
 		$init($Long);

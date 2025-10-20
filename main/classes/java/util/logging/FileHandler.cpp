@@ -187,6 +187,7 @@ bool FileHandler::$assertionsDisabled = false;
 $Set* FileHandler::locks = nullptr;
 
 void FileHandler::open($File* fname, bool append) {
+	$useLocalCurrentObjectStackCache();
 	int64_t len = 0;
 	if (append) {
 		len = $nc(fname)->length();
@@ -198,6 +199,7 @@ void FileHandler::open($File* fname, bool append) {
 }
 
 void FileHandler::configure() {
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager, manager, $LogManager::getLogManager());
 	$var($String, cname, $of(this)->getClass()->getName());
 	$set(this, pattern, $nc(manager)->getStringProperty($$str({cname, ".pattern"_s}), "%h/java%u.log"_s));
@@ -304,6 +306,7 @@ void FileHandler::init$($String* pattern, int64_t limit, int32_t count, bool app
 }
 
 bool FileHandler::isParentWritable($Path* path) {
+	$useLocalCurrentObjectStackCache();
 	$var($Path, parent, $nc(path)->getParent());
 	if (parent == nullptr) {
 		$assign(parent, $nc($(path->toAbsolutePath()))->getParent());
@@ -312,6 +315,7 @@ bool FileHandler::isParentWritable($Path* path) {
 }
 
 void FileHandler::openFiles() {
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager, manager, $LogManager::getLogManager());
 	$nc(manager)->checkPermission();
 	if (this->count < 1) {
@@ -432,6 +436,7 @@ $File* FileHandler::generate($String* pattern, int32_t generation, int32_t uniqu
 
 $File* FileHandler::generate($String* pat, int32_t count, int32_t generation, int32_t unique) {
 	$init(FileHandler);
+	$useLocalCurrentObjectStackCache();
 	$var($Path, path, $Paths::get(pat, $$new($StringArray, 0)));
 	$var($Path, result, nullptr);
 	bool sawg = false;
@@ -519,6 +524,7 @@ $File* FileHandler::generate($String* pat, int32_t count, int32_t generation, in
 
 void FileHandler::rotate() {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$var($Level, oldLevel, getLevel());
 		$init($Level);
 		setLevel($Level::OFF);

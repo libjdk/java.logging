@@ -73,6 +73,7 @@ void Logger$SystemLoggerHelper::init$() {
 
 bool Logger$SystemLoggerHelper::getBooleanProperty($String* key) {
 	$init(Logger$SystemLoggerHelper);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, s, $cast($String, $AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($Logger$SystemLoggerHelper$1, key)))));
 	return $Boolean::parseBoolean(s);

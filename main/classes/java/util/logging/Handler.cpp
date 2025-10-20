@@ -128,6 +128,7 @@ void Handler::init$() {
 }
 
 void Handler::init$($Level* defaultLevel, $Formatter* defaultFormatter, $Formatter* specifiedFormatter) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$set(this, manager, $LogManager::getLogManager());
 	$init($Level);
@@ -226,6 +227,7 @@ $Level* Handler::getLevel() {
 }
 
 bool Handler::isLoggable($LogRecord* record) {
+	$useLocalCurrentObjectStackCache();
 	int32_t levelValue = $nc($(getLevel()))->intValue();
 	if (record == nullptr) {
 		return false;

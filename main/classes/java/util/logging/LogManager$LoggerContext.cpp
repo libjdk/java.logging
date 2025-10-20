@@ -154,6 +154,7 @@ $Logger* LogManager$LoggerContext::demandLogger($String* name, $String* resource
 }
 
 void LogManager$LoggerContext::ensureInitialized() {
+	$useLocalCurrentObjectStackCache();
 	if (requiresDefaultLoggers()) {
 		ensureDefaultLogger($(getRootLogger()));
 		ensureDefaultLogger($(getGlobalLogger()));
@@ -161,6 +162,7 @@ void LogManager$LoggerContext::ensureInitialized() {
 }
 
 $Logger* LogManager$LoggerContext::findLogger($String* name) {
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager$LoggerWeakRef, ref, $cast($LogManager$LoggerWeakRef, $nc(this->namedLoggers)->get(name)));
 	$var($Logger, logger, ref == nullptr ? ($Logger*)nullptr : $cast($Logger, $nc(ref)->get()));
 	bool var$0 = logger != nullptr;
@@ -187,6 +189,7 @@ $Logger* LogManager$LoggerContext::findLogger($String* name) {
 }
 
 void LogManager$LoggerContext::ensureAllDefaultLoggers($Logger* logger) {
+	$useLocalCurrentObjectStackCache();
 	if (requiresDefaultLoggers()) {
 		$var($String, name, $nc(logger)->getName());
 		if (!$nc(name)->isEmpty()) {
@@ -217,6 +220,7 @@ bool LogManager$LoggerContext::addLocalLogger($Logger* logger) {
 
 bool LogManager$LoggerContext::addLocalLogger($Logger* logger, bool addDefaultLoggersIfNeeded) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if (addDefaultLoggersIfNeeded) {
 			ensureAllDefaultLoggers(logger);
 		}
@@ -277,6 +281,7 @@ $Enumeration* LogManager$LoggerContext::getLoggerNames() {
 }
 
 void LogManager$LoggerContext::processParentHandlers($Logger* logger, $String* name, $Predicate* visited) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($LogManager, owner, getOwner());
 	$AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($LogManager$LoggerContext$1, this, logger, owner, name)));
@@ -298,6 +303,7 @@ void LogManager$LoggerContext::processParentHandlers($Logger* logger, $String* n
 }
 
 $LogManager$LogNode* LogManager$LoggerContext::getNode($String* name$renamed) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, name, name$renamed);
 	if (name == nullptr || $nc(name)->isEmpty()) {
 		return this->root;

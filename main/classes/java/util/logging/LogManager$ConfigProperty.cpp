@@ -210,6 +210,7 @@ $String* LogManager$ConfigProperty::key($String* loggerName) {
 }
 
 $String* LogManager$ConfigProperty::loggerName($String* key) {
+	$useLocalCurrentObjectStackCache();
 	bool var$0 = !LogManager$ConfigProperty::$assertionsDisabled;
 	if (var$0) {
 		bool var$1 = $nc(key)->equals($($nc(this->suffix)->substring(1))) && this == LogManager$ConfigProperty::HANDLERS;
@@ -242,6 +243,7 @@ $String* LogManager$ConfigProperty::getLoggerName($String* property) {
 
 $Optional* LogManager$ConfigProperty::find($String* property) {
 	$init(LogManager$ConfigProperty);
+	$useLocalCurrentObjectStackCache();
 	return $nc($($nc($($nc(LogManager$ConfigProperty::ALL)->stream()))->filter(static_cast<$Predicate*>($$new(LogManager$ConfigProperty$$Lambda$lambda$find$0, property)))))->findFirst();
 }
 
@@ -252,6 +254,7 @@ bool LogManager$ConfigProperty::matches($String* property) {
 
 bool LogManager$ConfigProperty::needsUpdating($String* k, $Properties* previous, $Properties* next) {
 	$init(LogManager$ConfigProperty);
+	$useLocalCurrentObjectStackCache();
 	$var($String, p, $LogManager::trim($($nc(previous)->getProperty(k, nullptr))));
 	$var($String, n, $LogManager::trim($($nc(next)->getProperty(k, nullptr))));
 	return !$Objects::equals(p, n);
@@ -259,6 +262,7 @@ bool LogManager$ConfigProperty::needsUpdating($String* k, $Properties* previous,
 
 void LogManager$ConfigProperty::merge($String* k, $Properties* previous, $Properties* next, $BiFunction* mappingFunction) {
 	$init(LogManager$ConfigProperty);
+	$useLocalCurrentObjectStackCache();
 	$var($String, p, $LogManager::trim($($nc(previous)->getProperty(k, nullptr))));
 	$var($String, n, $LogManager::trim($($nc(next)->getProperty(k, nullptr))));
 	$var($String, mapped, $LogManager::trim($cast($String, $($nc(mappingFunction)->apply(p, n)))));

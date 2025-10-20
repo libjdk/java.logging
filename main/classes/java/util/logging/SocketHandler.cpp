@@ -78,6 +78,7 @@ $Object* allocate$SocketHandler($Class* clazz) {
 }
 
 void SocketHandler::init$() {
+	$useLocalCurrentObjectStackCache();
 	$init($Level);
 	$StreamHandler::init$($Level::ALL, $$new($XMLFormatter), nullptr);
 	$var($LogManager, manager, $LogManager::getLogManager());
@@ -103,6 +104,7 @@ void SocketHandler::init$($String* host, int32_t port) {
 }
 
 void SocketHandler::connect() {
+	$useLocalCurrentObjectStackCache();
 	if (this->port == 0) {
 		$throwNew($IllegalArgumentException, $$str({"Bad port: "_s, $$str(this->port)}));
 	}

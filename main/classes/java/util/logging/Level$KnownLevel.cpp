@@ -451,6 +451,7 @@ $Optional* Level$KnownLevel::referent() {
 }
 
 void Level$KnownLevel::remove() {
+	$useLocalCurrentObjectStackCache();
 	$nc($($Optional::ofNullable($cast($List, $($nc(Level$KnownLevel::nameToLevels)->get($nc(this->mirroredLevel)->name))))))->ifPresent(static_cast<$Consumer*>($$new(Level$KnownLevel$$Lambda$lambda$remove$0, this)));
 	$nc($($Optional::ofNullable($cast($List, $($nc(Level$KnownLevel::intToLevels)->get($($Integer::valueOf($nc(this->mirroredLevel)->value))))))))->ifPresent(static_cast<$Consumer*>($$new(Level$KnownLevel$$Lambda$lambda$remove$0, this)));
 }
@@ -470,6 +471,7 @@ void Level$KnownLevel::purge() {
 
 void Level$KnownLevel::registerWithClassLoader($Level* customLevel) {
 	$init(Level$KnownLevel);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($PrivilegedAction, pa, static_cast<$PrivilegedAction*>($new(Level$KnownLevel$$Lambda$getClassLoader$1, static_cast<$Class*>($nc($of(customLevel))->getClass()))));
 	$var($ClassLoader, cl, $cast($ClassLoader, $AccessController::doPrivileged(pa)));
@@ -480,6 +482,7 @@ void Level$KnownLevel::add($Level* l) {
 	$load(Level$KnownLevel);
 	$synchronized(class$) {
 		$init(Level$KnownLevel);
+		$useLocalCurrentObjectStackCache();
 		purge();
 		$var(Level$KnownLevel, o, $new(Level$KnownLevel, l));
 		$nc(($cast($List, $($nc(Level$KnownLevel::nameToLevels)->computeIfAbsent($nc(l)->name, static_cast<$Function*>($$new(Level$KnownLevel$$Lambda$lambda$add$3$3)))))))->add(o);
@@ -495,6 +498,7 @@ $Optional* Level$KnownLevel::findByName($String* name, $Function* selector) {
 	$load(Level$KnownLevel);
 	$synchronized(class$) {
 		$init(Level$KnownLevel);
+		$useLocalCurrentObjectStackCache();
 		purge();
 		return $nc($($nc($($nc($($nc(($cast($List, $($nc(Level$KnownLevel::nameToLevels)->getOrDefault(name, $($Collections::emptyList()))))))->stream()))->map(selector)))->flatMap(static_cast<$Function*>($$new(Level$KnownLevel$$Lambda$stream$5)))))->findFirst();
 	}
@@ -504,6 +508,7 @@ $Optional* Level$KnownLevel::findByValue(int32_t value, $Function* selector) {
 	$load(Level$KnownLevel);
 	$synchronized(class$) {
 		$init(Level$KnownLevel);
+		$useLocalCurrentObjectStackCache();
 		purge();
 		$var($Object, var$0, $of($Integer::valueOf(value)));
 		return $nc($($nc($($nc($($nc(($cast($List, $($nc(Level$KnownLevel::intToLevels)->getOrDefault(var$0, $($Collections::emptyList()))))))->stream()))->map(selector)))->flatMap(static_cast<$Function*>($$new(Level$KnownLevel$$Lambda$stream$5)))))->findFirst();
@@ -514,6 +519,7 @@ $Optional* Level$KnownLevel::findByLocalizedLevelName($String* name, $Function* 
 	$load(Level$KnownLevel);
 	$synchronized(class$) {
 		$init(Level$KnownLevel);
+		$useLocalCurrentObjectStackCache();
 		purge();
 		return $nc($($nc($($nc($($nc($($nc($($nc($($nc(Level$KnownLevel::nameToLevels)->values()))->stream()))->flatMap(static_cast<$Function*>($$new(Level$KnownLevel$$Lambda$stream$6)))))->map(selector)))->flatMap(static_cast<$Function*>($$new(Level$KnownLevel$$Lambda$stream$5)))))->filter(static_cast<$Predicate*>($$new(Level$KnownLevel$$Lambda$lambda$findByLocalizedLevelName$5$7, name)))))->findFirst();
 	}
@@ -523,6 +529,7 @@ $Optional* Level$KnownLevel::matches($Level* l) {
 	$load(Level$KnownLevel);
 	$synchronized(class$) {
 		$init(Level$KnownLevel);
+		$useLocalCurrentObjectStackCache();
 		purge();
 		$var($List, list, $cast($List, $nc(Level$KnownLevel::nameToLevels)->get($nc(l)->name)));
 		if (list != nullptr) {

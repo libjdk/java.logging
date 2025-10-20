@@ -266,6 +266,7 @@ $String* Level::getLevelName() {
 }
 
 $String* Level::computeLocalizedLevelName($Locale* newLocale) {
+	$useLocalCurrentObjectStackCache();
 	$var($Module, module, $of(this)->getClass()->getModule());
 	$init($Level$RbAccess);
 	$var($ResourceBundle, rb, $nc($Level$RbAccess::RB_ACCESS)->getBundle(this->resourceBundleName, newLocale, module));
@@ -297,6 +298,7 @@ $String* Level::getCachedLocalizedLevelName() {
 
 $String* Level::getLocalizedLevelName() {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		$var($String, cachedLocalizedName, getCachedLocalizedLevelName());
 		if (cachedLocalizedName != nullptr) {
 			return cachedLocalizedName;
@@ -315,6 +317,7 @@ $String* Level::getLocalizedLevelName() {
 
 Level* Level::findLevel($String* name) {
 	$init(Level);
+	$useLocalCurrentObjectStackCache();
 	if (name == nullptr) {
 		$throwNew($NullPointerException);
 	}
@@ -361,6 +364,7 @@ Level* Level::parse($String* name) {
 	$load(Level);
 	$synchronized(class$) {
 		$init(Level);
+		$useLocalCurrentObjectStackCache();
 		$nc(name)->length();
 		$var($Optional, level, nullptr);
 		$assign(level, $Level$KnownLevel::findByName(name, static_cast<$Function*>($$new(Level$$Lambda$referent$1))));
@@ -387,6 +391,7 @@ Level* Level::parse($String* name) {
 }
 
 bool Level::equals(Object$* ox) {
+	$useLocalCurrentObjectStackCache();
 	try {
 		$var(Level, lx, $cast(Level, ox));
 		return ($nc(lx)->value == this->value);

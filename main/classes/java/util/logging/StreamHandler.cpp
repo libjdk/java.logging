@@ -130,6 +130,7 @@ void StreamHandler::init$($Level* defaultLevel, $Formatter* defaultFormatter, $F
 
 void StreamHandler::setOutputStream($OutputStream* out) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if (out == nullptr) {
 			$throwNew($NullPointerException);
 		}
@@ -167,6 +168,7 @@ void StreamHandler::setEncoding($String* encoding) {
 
 void StreamHandler::publish($LogRecord* record) {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		if (!isLoggable(record)) {
 			return;
 		}
@@ -213,6 +215,7 @@ void StreamHandler::flush() {
 
 void StreamHandler::flushAndClose() {
 	$synchronized(this) {
+		$useLocalCurrentObjectStackCache();
 		checkPermission();
 		if (this->writer != nullptr) {
 			try {
@@ -240,6 +243,7 @@ void StreamHandler::close() {
 }
 
 void StreamHandler::setOutputStreamPrivileged($OutputStream* out) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$init($LogManager);
 	$AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($StreamHandler$1, this, out)), ($AccessControlContext*)nullptr, $$new($PermissionArray, {$LogManager::controlPermission}));

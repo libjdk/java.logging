@@ -45,6 +45,7 @@ $Object* allocate$LoggingPermission($Class* clazz) {
 }
 
 void LoggingPermission::init$($String* name, $String* actions) {
+	$useLocalCurrentObjectStackCache();
 	$BasicPermission::init$(name);
 	if (!$nc(name)->equals("control"_s)) {
 		$throwNew($IllegalArgumentException, $$str({"name: "_s, name}));

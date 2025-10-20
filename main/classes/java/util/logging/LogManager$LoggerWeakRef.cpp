@@ -83,6 +83,7 @@ void LogManager$LoggerWeakRef::init$($LogManager* this$0, $Logger* logger) {
 }
 
 void LogManager$LoggerWeakRef::dispose() {
+	$useLocalCurrentObjectStackCache();
 	$synchronized(this) {
 		if (this->disposed) {
 			return;

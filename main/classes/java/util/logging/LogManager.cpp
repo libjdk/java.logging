@@ -743,6 +743,7 @@ void LogManager::init$() {
 }
 
 void LogManager::init$($Void* checked) {
+	$useLocalCurrentObjectStackCache();
 	$set(this, props, $new($Properties));
 	$set(this, systemContext, $new($LogManager$SystemLoggerContext, this));
 	$set(this, userContext, $new($LogManager$LoggerContext, this));
@@ -762,6 +763,7 @@ void LogManager::init$($Void* checked) {
 
 $Void* LogManager::checkSubclassPermissions() {
 	$init(LogManager);
+	$useLocalCurrentObjectStackCache();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm != nullptr) {
 		sm->checkPermission($$new($RuntimePermission, "shutdownHooks"_s));
@@ -771,6 +773,7 @@ $Void* LogManager::checkSubclassPermissions() {
 }
 
 void LogManager::ensureLogManagerInitialized() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var(LogManager, owner, this);
 	if (this->initializationDone || owner != LogManager::manager) {
@@ -826,6 +829,7 @@ LogManager* LogManager::getLogManager() {
 }
 
 void LogManager::readPrimordialConfiguration() {
+	$useLocalCurrentObjectStackCache();
 	if (!this->readPrimordialConfiguration$) {
 		$init($System);
 		if ($System::out == nullptr) {
@@ -845,6 +849,7 @@ void LogManager::readPrimordialConfiguration() {
 }
 
 $LogManager$LoggerContext* LogManager::getUserContext() {
+	$useLocalCurrentObjectStackCache();
 	$var($LogManager$LoggerContext, context, nullptr);
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	$var($JavaAWTAccess, javaAwtAccess, $SharedSecrets::getJavaAWTAccess());
@@ -871,6 +876,7 @@ $LogManager$LoggerContext* LogManager::getSystemContext() {
 }
 
 $List* LogManager::contexts() {
+	$useLocalCurrentObjectStackCache();
 	$var($List, cxs, $new($ArrayList));
 	cxs->add($(getSystemContext()));
 	cxs->add($(getUserContext()));
@@ -883,6 +889,7 @@ $Logger* LogManager::demandLogger($String* name, $String* resourceBundleName, $C
 }
 
 $Logger* LogManager::demandLogger($String* name, $String* resourceBundleName, $Module* module) {
+	$useLocalCurrentObjectStackCache();
 	$var($Logger, result, getLogger(name));
 	if (result == nullptr) {
 		$var($Logger, newLogger, $new($Logger, name, resourceBundleName, module, this, false));
@@ -902,6 +909,7 @@ $Logger* LogManager::demandSystemLogger($String* name, $String* resourceBundleNa
 }
 
 $Logger* LogManager::demandSystemLogger($String* name, $String* resourceBundleName, $Module* module) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($Logger, sysLogger, $nc($(getSystemContext()))->demandLogger(name, resourceBundleName, module));
 	$var($Logger, logger, nullptr);
@@ -925,6 +933,7 @@ void LogManager::loadLoggerHandlers($Logger* logger, $String* name, $String* han
 }
 
 void LogManager::setLoggerHandlers($Logger* logger, $String* name, $String* handlersPropertyName, $List* handlers) {
+	$useLocalCurrentObjectStackCache();
 	bool var$0 = !$nc(handlers)->isEmpty();
 	bool ensureCloseOnReset = var$0 && getBooleanProperty($$str({handlersPropertyName, ".ensureCloseOnReset"_s}), true);
 	int32_t count = 0;
@@ -943,6 +952,7 @@ void LogManager::setLoggerHandlers($Logger* logger, $String* name, $String* hand
 }
 
 $List* LogManager::createLoggerHandlers($String* name, $String* handlersPropertyName) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($StringArray, names, parseClassNames(handlersPropertyName));
 	$var($List, handlers, $new($ArrayList, $nc(names)->length));
@@ -981,6 +991,7 @@ $List* LogManager::createLoggerHandlers($String* name, $String* handlersProperty
 }
 
 void LogManager::drainLoggerRefQueueBounded() {
+	$useLocalCurrentObjectStackCache();
 	for (int32_t i = 0; i < LogManager::MAX_ITERATIONS; ++i) {
 		if (this->loggerRefQueue == nullptr) {
 			break;
@@ -994,6 +1005,7 @@ void LogManager::drainLoggerRefQueueBounded() {
 }
 
 bool LogManager::addLogger($Logger* logger) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, name, $nc(logger)->getName());
 	if (name == nullptr) {
 		$throwNew($NullPointerException);
@@ -1016,6 +1028,7 @@ bool LogManager::forceLoadHandlers($Logger* logger) {
 
 void LogManager::doSetLevel($Logger* logger, $Level* level) {
 	$init(LogManager);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm == nullptr) {
@@ -1027,6 +1040,7 @@ void LogManager::doSetLevel($Logger* logger, $Level* level) {
 
 void LogManager::doSetParent($Logger* logger, $Logger* parent) {
 	$init(LogManager);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm == nullptr) {
@@ -1045,6 +1059,7 @@ $Enumeration* LogManager::getLoggerNames() {
 }
 
 void LogManager::readConfiguration() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	checkPermission();
 	$var($String, cname, $System::getProperty("java.util.logging.config.class"_s));
@@ -1098,6 +1113,7 @@ void LogManager::readConfiguration() {
 }
 
 $String* LogManager::getConfigurationFileName() {
+	$useLocalCurrentObjectStackCache();
 	$var($String, fname, $System::getProperty("java.util.logging.config.file"_s));
 	if (fname == nullptr) {
 		$assign(fname, $System::getProperty("java.home"_s));
@@ -1113,6 +1129,7 @@ $String* LogManager::getConfigurationFileName() {
 }
 
 void LogManager::reset() {
+	$useLocalCurrentObjectStackCache();
 	checkPermission();
 	$var($List, persistent, nullptr);
 	$nc(this->configurationLock)->lock();
@@ -1147,6 +1164,7 @@ void LogManager::reset() {
 }
 
 void LogManager::resetLoggerContext($LogManager$LoggerContext* cx) {
+	$useLocalCurrentObjectStackCache();
 	$var($Enumeration, enum_, $nc(cx)->getLoggerNames());
 	while ($nc(enum_)->hasMoreElements()) {
 		$var($String, name, $cast($String, enum_->nextElement()));
@@ -1158,6 +1176,7 @@ void LogManager::resetLoggerContext($LogManager$LoggerContext* cx) {
 }
 
 void LogManager::closeHandlers($Logger* logger) {
+	$useLocalCurrentObjectStackCache();
 	$var($HandlerArray, targets, $nc(logger)->getHandlers());
 	{
 		$var($HandlerArray, arr$, targets);
@@ -1193,6 +1212,7 @@ void LogManager::resetLogger($Logger* logger) {
 }
 
 $StringArray* LogManager::parseClassNames($String* propertyName) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, hands, getProperty(propertyName));
 	if (hands == nullptr) {
 		return $new($StringArray, 0);
@@ -1223,6 +1243,7 @@ $StringArray* LogManager::parseClassNames($String* propertyName) {
 }
 
 void LogManager::readConfiguration($InputStream* ins) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	checkPermission();
 	$nc(this->configurationLock)->lock();
@@ -1291,6 +1312,7 @@ $String* LogManager::trim($String* value) {
 }
 
 void LogManager::updateConfiguration($Function* mapper) {
+	$useLocalCurrentObjectStackCache();
 	checkPermission();
 	ensureLogManagerInitialized();
 	drainLoggerRefQueueBounded();
@@ -1326,6 +1348,7 @@ void LogManager::updateConfiguration($Function* mapper) {
 }
 
 void LogManager::updateConfiguration($InputStream* ins, $Function* mapper) {
+	$useLocalCurrentObjectStackCache();
 	checkPermission();
 	ensureLogManagerInitialized();
 	drainLoggerRefQueueBounded();
@@ -1548,6 +1571,7 @@ $String* LogManager::getStringProperty($String* name, $String* defaultValue) {
 }
 
 int32_t LogManager::getIntProperty($String* name, int32_t defaultValue) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, val, getProperty(name));
 	if (val == nullptr) {
 		return defaultValue;
@@ -1562,6 +1586,7 @@ int32_t LogManager::getIntProperty($String* name, int32_t defaultValue) {
 }
 
 int64_t LogManager::getLongProperty($String* name, int64_t defaultValue) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, val, getProperty(name));
 	if (val == nullptr) {
 		return defaultValue;
@@ -1594,6 +1619,7 @@ bool LogManager::getBooleanProperty($String* name, bool defaultValue) {
 }
 
 $Level* LogManager::getLevelProperty($String* name, $Level* defaultValue) {
+	$useLocalCurrentObjectStackCache();
 	$var($String, val, getProperty(name));
 	if (val == nullptr) {
 		return defaultValue;
@@ -1603,6 +1629,7 @@ $Level* LogManager::getLevelProperty($String* name, $Level* defaultValue) {
 }
 
 $Filter* LogManager::getFilterProperty($String* name, $Filter* defaultValue) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, val, getProperty(name));
 	try {
@@ -1617,6 +1644,7 @@ $Filter* LogManager::getFilterProperty($String* name, $Filter* defaultValue) {
 }
 
 $Formatter* LogManager::getFormatterProperty($String* name, $Formatter* defaultValue) {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($String, val, getProperty(name));
 	try {
@@ -1631,6 +1659,7 @@ $Formatter* LogManager::getFormatterProperty($String* name, $Formatter* defaultV
 }
 
 void LogManager::initializeGlobalHandlers() {
+	$useLocalCurrentObjectStackCache();
 	int32_t state = this->globalHandlersState;
 	if (state == LogManager::STATE_INITIALIZED || state == LogManager::STATE_SHUTDOWN) {
 		return;
@@ -1684,6 +1713,7 @@ void LogManager::checkAccess() {
 }
 
 void LogManager::setLevelsOnExistingLoggers() {
+	$useLocalCurrentObjectStackCache();
 	$var($Enumeration, enum_, $nc(this->props)->propertyNames());
 	while ($nc(enum_)->hasMoreElements()) {
 		$var($String, key, $cast($String, enum_->nextElement()));
@@ -1723,6 +1753,7 @@ $LoggingMXBean* LogManager::getLoggingMXBean() {
 }
 
 LogManager* LogManager::addConfigurationListener($Runnable* listener) {
+	$useLocalCurrentObjectStackCache();
 	$var($Runnable, r, $cast($Runnable, $Objects::requireNonNull(listener)));
 	checkPermission();
 	$var($SecurityManager, sm, $System::getSecurityManager());
@@ -1740,6 +1771,7 @@ void LogManager::removeConfigurationListener($Runnable* listener) {
 }
 
 void LogManager::invokeConfigurationListeners() {
+	$useLocalCurrentObjectStackCache();
 	$var($Throwable, t, nullptr);
 	{
 		$var($RunnableArray, arr$, $fcast($RunnableArray, $nc($($nc(this->listeners)->values()))->toArray($$new($RunnableArray, 0))));

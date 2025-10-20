@@ -107,6 +107,7 @@ void LogManager$ModType::init$($String* $enum$name, int32_t $enum$ordinal) {
 
 LogManager$ModType* LogManager$ModType::of($String* previous, $String* next) {
 	$init(LogManager$ModType);
+	$useLocalCurrentObjectStackCache();
 	if (previous == nullptr && next != nullptr) {
 		return LogManager$ModType::ADDED;
 	}

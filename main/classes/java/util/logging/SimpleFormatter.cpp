@@ -124,6 +124,7 @@ void SimpleFormatter::init$() {
 }
 
 $String* SimpleFormatter::format($LogRecord* record) {
+	$useLocalCurrentObjectStackCache();
 	$var($Instant, var$0, $nc(record)->getInstant());
 	$var($ZonedDateTime, zdt, $ZonedDateTime::ofInstant(var$0, $($ZoneId::systemDefault())));
 	$var($String, source, nullptr);

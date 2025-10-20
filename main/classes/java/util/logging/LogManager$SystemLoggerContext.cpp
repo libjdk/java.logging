@@ -70,6 +70,7 @@ void LogManager$SystemLoggerContext::init$($LogManager* this$0) {
 }
 
 $Logger* LogManager$SystemLoggerContext::demandLogger($String* name, $String* resourceBundleName, $Module* module) {
+	$useLocalCurrentObjectStackCache();
 	$var($Logger, result, findLogger(name));
 	if (result == nullptr) {
 		$var($Logger, newLogger, $new($Logger, name, resourceBundleName, module, $(getOwner()), true));

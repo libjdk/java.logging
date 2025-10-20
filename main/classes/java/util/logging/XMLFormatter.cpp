@@ -94,6 +94,7 @@ $Object* allocate$XMLFormatter($Class* clazz) {
 }
 
 void XMLFormatter::init$() {
+	$useLocalCurrentObjectStackCache();
 	$Formatter::init$();
 	$set(this, manager, $LogManager::getLogManager());
 	this->useInstant = (this->manager == nullptr) || $nc(this->manager)->getBooleanProperty($$str({$($of(this)->getClass()->getName()), ".useInstant"_s}), true);
@@ -142,6 +143,7 @@ void XMLFormatter::escape($StringBuilder* sb, $String* text$renamed) {
 }
 
 $String* XMLFormatter::format($LogRecord* record) {
+	$useLocalCurrentObjectStackCache();
 	$var($StringBuilder, sb, $new($StringBuilder, 500));
 	sb->append("<record>\n"_s);
 	$var($Instant, instant, $nc(record)->getInstant());
@@ -265,6 +267,7 @@ $String* XMLFormatter::format($LogRecord* record) {
 }
 
 $String* XMLFormatter::getHead($Handler* h) {
+	$useLocalCurrentObjectStackCache();
 	$var($StringBuilder, sb, $new($StringBuilder));
 	$var($String, encoding, nullptr);
 	sb->append("<?xml version=\"1.0\""_s);

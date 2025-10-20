@@ -157,6 +157,7 @@ void Logger$ConfigurationData::removeHandler($Handler* h) {
 }
 
 Logger$ConfigurationData* Logger$ConfigurationData::merge($Logger* systemPeer) {
+	$useLocalCurrentObjectStackCache();
 	if (!$nc(systemPeer)->isSystemLogger) {
 		$throwNew($InternalError, "not a system logger"_s);
 	}

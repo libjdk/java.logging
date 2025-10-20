@@ -73,6 +73,7 @@ void LogManager$1::init$() {
 }
 
 $Object* LogManager$1::run() {
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($LogManager, mgr, nullptr);
 	$var($String, cname, nullptr);

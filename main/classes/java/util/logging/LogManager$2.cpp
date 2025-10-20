@@ -84,6 +84,7 @@ void LogManager$2::init$($LogManager* this$0, $LogManager* val$owner) {
 }
 
 $Object* LogManager$2::run() {
+	$useLocalCurrentObjectStackCache();
 	if (!LogManager$2::$assertionsDisabled && !(this->this$0->rootLogger == nullptr)) {
 		$throwNew($AssertionError);
 	}

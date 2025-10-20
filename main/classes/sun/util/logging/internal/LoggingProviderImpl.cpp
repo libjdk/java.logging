@@ -166,6 +166,7 @@ void LoggingProviderImpl::init$() {
 
 $Logger* LoggingProviderImpl::demandJULLoggerFor($String* name, $Module* module) {
 	$init(LoggingProviderImpl);
+	$useLocalCurrentObjectStackCache();
 	$beforeCallerSensitive();
 	$var($LogManager, manager, $LogManager::getLogManager());
 	$var($SecurityManager, sm, $System::getSecurityManager());
@@ -178,6 +179,7 @@ $Logger* LoggingProviderImpl::demandJULLoggerFor($String* name, $Module* module)
 }
 
 $System$Logger* LoggingProviderImpl::demandLoggerFor($String* name, $Module* module) {
+	$useLocalCurrentObjectStackCache();
 	$var($SecurityManager, sm, $System::getSecurityManager());
 	if (sm != nullptr) {
 		sm->checkPermission(LoggingProviderImpl::LOGGERFINDER_PERMISSION);

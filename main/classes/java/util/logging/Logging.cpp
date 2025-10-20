@@ -77,6 +77,7 @@ void Logging::init$() {
 }
 
 $List* Logging::getLoggerNames() {
+	$useLocalCurrentObjectStackCache();
 	$var($Enumeration, loggers, $nc(Logging::logManager)->getLoggerNames());
 	$var($ArrayList, array, $new($ArrayList));
 	for (; $nc(loggers)->hasMoreElements();) {
@@ -86,6 +87,7 @@ $List* Logging::getLoggerNames() {
 }
 
 $String* Logging::getLoggerLevel($String* loggerName) {
+	$useLocalCurrentObjectStackCache();
 	$var($Logger, l, $nc(Logging::logManager)->getLogger(loggerName));
 	if (l == nullptr) {
 		return nullptr;
@@ -99,6 +101,7 @@ $String* Logging::getLoggerLevel($String* loggerName) {
 }
 
 void Logging::setLoggerLevel($String* loggerName, $String* levelName) {
+	$useLocalCurrentObjectStackCache();
 	if (loggerName == nullptr) {
 		$throwNew($NullPointerException, "loggerName is null"_s);
 	}
@@ -117,6 +120,7 @@ void Logging::setLoggerLevel($String* loggerName, $String* levelName) {
 }
 
 $String* Logging::getParentLoggerName($String* loggerName) {
+	$useLocalCurrentObjectStackCache();
 	$var($Logger, l, $nc(Logging::logManager)->getLogger(loggerName));
 	if (l == nullptr) {
 		return nullptr;

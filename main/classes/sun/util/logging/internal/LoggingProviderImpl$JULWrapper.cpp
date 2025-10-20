@@ -290,6 +290,7 @@ void LoggingProviderImpl$JULWrapper::log($System$Logger$Level* level, $Supplier*
 }
 
 void LoggingProviderImpl$JULWrapper::log($System$Logger$Level* level, Object$* obj) {
+	$useLocalCurrentObjectStackCache();
 	$Objects::requireNonNull(obj);
 	$var($Level, var$0, toJUL(level));
 	$nc(this->julLogger)->log(var$0, static_cast<$Supplier*>($$new(LoggingProviderImpl$JULWrapper$$Lambda$lambda$log$0, obj)));
@@ -333,6 +334,7 @@ bool LoggingProviderImpl$JULWrapper::isEnabled() {
 }
 
 $PlatformLogger$Level* LoggingProviderImpl$JULWrapper::getPlatformLevel() {
+	$useLocalCurrentObjectStackCache();
 	$var($Level, javaLevel, $nc(this->julLogger)->getLevel());
 	if (javaLevel == nullptr) {
 		return nullptr;
