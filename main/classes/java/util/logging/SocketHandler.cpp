@@ -4,17 +4,6 @@
 #include <java/io/FilterOutputStream.h>
 #include <java/io/IOException.h>
 #include <java/io/OutputStream.h>
-#include <java/io/PrintStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/net/Socket.h>
 #include <java/util/logging/Formatter.h>
 #include <java/util/logging/Level.h>
@@ -87,9 +76,7 @@ void SocketHandler::init$() {
 	$set(this, host, manager->getStringProperty($$str({cname, ".host"_s}), nullptr));
 	try {
 		connect();
-	} catch ($IOException&) {
-		$var($IOException, ix, $catch());
-		$init($System);
+	} catch ($IOException& ix) {
 		$nc($System::err)->println($$str({"SocketHandler: connect failed to "_s, this->host, ":"_s, $$str(this->port)}));
 		$throw(ix);
 	}
@@ -123,8 +110,7 @@ void SocketHandler::close() {
 		if (this->sock != nullptr) {
 			try {
 				$nc(this->sock)->close();
-			} catch ($IOException&) {
-				$catch();
+			} catch ($IOException& ix) {
 			}
 		}
 		$set(this, sock, nullptr);

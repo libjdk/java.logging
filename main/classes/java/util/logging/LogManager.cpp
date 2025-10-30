@@ -5,40 +5,18 @@
 #include <java/io/FilterInputStream.h>
 #include <java/io/IOException.h>
 #include <java/io/InputStream.h>
-#include <java/io/PrintStream.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
 #include <java/lang/AssertionError.h>
-#include <java/lang/Boolean.h>
-#include <java/lang/Character.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/CompoundAttribute.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
 #include <java/lang/IllegalStateException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Module.h>
-#include <java/lang/NamedAttribute.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/Runnable.h>
 #include <java/lang/Runtime.h>
-#include <java/lang/RuntimeException.h>
 #include <java/lang/RuntimePermission.h>
 #include <java/lang/SecurityManager.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
 #include <java/lang/ThreadDeath.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
@@ -46,8 +24,6 @@
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/ref/Reference.h>
 #include <java/lang/ref/ReferenceQueue.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/nio/file/Path.h>
 #include <java/nio/file/Paths.h>
 #include <java/security/AccessControlContext.h>
@@ -735,7 +711,6 @@ bool LogManager::$assertionsDisabled = false;
 $Level* LogManager::defaultLevel = nullptr;
 LogManager* LogManager::manager = nullptr;
 $Permission* LogManager::controlPermission = nullptr;
-
 $String* LogManager::LOGGING_MXBEAN_NAME = nullptr;
 
 void LogManager::init$() {
@@ -756,8 +731,7 @@ void LogManager::init$($Void* checked) {
 	$set(this, loggerRefQueue, $new($ReferenceQueue));
 	try {
 		$nc($($Runtime::getRuntime()))->addShutdownHook($$new($LogManager$Cleaner, this));
-	} catch ($IllegalStateException&) {
-		$catch();
+	} catch ($IllegalStateException& e) {
 	}
 }
 
@@ -797,8 +771,8 @@ void LogManager::ensureLogManagerInitialized() {
 				$var($Throwable, var$2, nullptr);
 				try {
 					$AccessController::doPrivileged(static_cast<$PrivilegedAction*>($$new($LogManager$2, this, owner)));
-				} catch ($Throwable&) {
-					$assign(var$2, $catch());
+				} catch ($Throwable& var$3) {
+					$assign(var$2, var$3);
 				} /*finally*/ {
 					this->initializationDone = true;
 				}
@@ -806,8 +780,8 @@ void LogManager::ensureLogManagerInitialized() {
 					$throw(var$2);
 				}
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$4) {
+			$assign(var$0, var$4);
 		} $finally: {
 			$nc(this->configurationLock)->unlock();
 		}
@@ -829,9 +803,7 @@ LogManager* LogManager::getLogManager() {
 }
 
 void LogManager::readPrimordialConfiguration() {
-	$useLocalCurrentObjectStackCache();
 	if (!this->readPrimordialConfiguration$) {
-		$init($System);
 		if ($System::out == nullptr) {
 			return;
 		}
@@ -839,8 +811,7 @@ void LogManager::readPrimordialConfiguration() {
 		try {
 			readConfiguration();
 			$BootstrapLogger::redirectTemporaryLoggers();
-		} catch ($Exception&) {
-			$var($Exception, ex, $catch());
+		} catch ($Exception& ex) {
 			if (!LogManager::$assertionsDisabled) {
 				$throwNew($AssertionError, $of($$str({"Exception raised while reading logging configuration: "_s, ex})));
 			}
@@ -972,14 +943,11 @@ $List* LogManager::createLoggerHandlers($String* name, $String* handlersProperty
 						if (l != nullptr) {
 							$nc(hdl)->setLevel(l);
 						} else {
-							$init($System);
 							$nc($System::err)->println($$str({"Can\'t set level for "_s, type}));
 						}
 					}
 					handlers->add(hdl);
-				} catch ($Exception&) {
-					$var($Exception, ex, $catch());
-					$init($System);
+				} catch ($Exception& ex) {
 					$nc($System::err)->println($$str({"Can\'t load log handler \""_s, type, "\""_s}));
 					$nc($System::err)->println($$str({""_s, ex}));
 					ex->printStackTrace();
@@ -1069,14 +1037,12 @@ void LogManager::readConfiguration() {
 				$Class* clz = $nc($($ClassLoader::getSystemClassLoader()))->loadClass(cname);
 				$var($Object, witness, $nc(clz)->newInstance());
 				return;
-			} catch ($ClassNotFoundException&) {
-				$var($ClassNotFoundException, ex, $catch());
+			} catch ($ClassNotFoundException& ex) {
 				$Class* clz = $nc($($($Thread::currentThread())->getContextClassLoader()))->loadClass(cname);
 				$var($Object, witness, $nc(clz)->newInstance());
 				return;
 			}
-		} catch ($Exception&) {
-			$var($Exception, ex, $catch());
+		} catch ($Exception& ex) {
 			$nc($System::err)->println($$str({"Logging configuration class \""_s, cname, "\" failed"_s}));
 			$nc($System::err)->println($$str({""_s, ex}));
 		}
@@ -1090,18 +1056,16 @@ void LogManager::readConfiguration() {
 				try {
 					$var($BufferedInputStream, bin, $new($BufferedInputStream, in));
 					readConfiguration(bin);
-				} catch ($Throwable&) {
-					$var($Throwable, t$, $catch());
+				} catch ($Throwable& t$) {
 					try {
 						in->close();
-					} catch ($Throwable&) {
-						$var($Throwable, x2, $catch());
+					} catch ($Throwable& x2) {
 						t$->addSuppressed(x2);
 					}
 					$throw(t$);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				in->close();
 			}
@@ -1152,8 +1116,8 @@ void LogManager::reset() {
 				}
 			}
 			persistent->clear();
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$1) {
+			$assign(var$0, var$1);
 		} /*finally*/ {
 			$nc(this->configurationLock)->unlock();
 		}
@@ -1188,10 +1152,8 @@ void LogManager::closeHandlers($Logger* logger) {
 				logger->removeHandler(h);
 				try {
 					$nc(h)->close();
-				} catch ($Exception&) {
-					$catch();
-				} catch ($Error&) {
-					$var($Error, e, $catch());
+				} catch ($Exception& ex) {
+				} catch ($Error& e) {
 					if (this->globalHandlersState != LogManager::STATE_SHUTDOWN) {
 						$throw(e);
 					}
@@ -1260,8 +1222,7 @@ void LogManager::readConfiguration($InputStream* ins) {
 				reset();
 				try {
 					$nc(this->props)->load(ins);
-				} catch ($IllegalArgumentException&) {
-					$var($IllegalArgumentException, x, $catch());
+				} catch ($IllegalArgumentException& x) {
 					$throwNew($IOException, $(x->getMessage()), x);
 				}
 				$var($StringArray, names, parseClassNames("config"_s));
@@ -1275,9 +1236,7 @@ void LogManager::readConfiguration($InputStream* ins) {
 							try {
 								$Class* clz = $nc($($ClassLoader::getSystemClassLoader()))->loadClass(word);
 								$var($Object, witness, $nc(clz)->newInstance());
-							} catch ($Exception&) {
-								$var($Exception, ex, $catch());
-								$init($System);
+							} catch ($Exception& ex) {
 								$nc($System::err)->println($$str({"Can\'t load config class \""_s, word, "\""_s}));
 								$nc($System::err)->println($$str({""_s, ex}));
 							}
@@ -1286,13 +1245,12 @@ void LogManager::readConfiguration($InputStream* ins) {
 				}
 				setLevelsOnExistingLoggers();
 				this->globalHandlersState = LogManager::STATE_UNINITIALIZED;
-			} catch ($Throwable&) {
-				$var($Throwable, t, $catch());
+			} catch ($Throwable& t) {
 				this->globalHandlersState = LogManager::STATE_INITIALIZED;
 				$throw(t);
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$2) {
+			$assign(var$0, var$2);
 		} $finally: {
 			$nc(this->configurationLock)->unlock();
 		}
@@ -1325,18 +1283,16 @@ void LogManager::updateConfiguration($Function* mapper) {
 				try {
 					$var($BufferedInputStream, bin, $new($BufferedInputStream, in));
 					updateConfiguration(bin, mapper);
-				} catch ($Throwable&) {
-					$var($Throwable, t$, $catch());
+				} catch ($Throwable& t$) {
 					try {
 						in->close();
-					} catch ($Throwable&) {
-						$var($Throwable, x2, $catch());
+					} catch ($Throwable& x2) {
 						t$->addSuppressed(x2);
 					}
 					$throw(t$);
 				}
-			} catch ($Throwable&) {
-				$assign(var$0, $catch());
+			} catch ($Throwable& var$1) {
+				$assign(var$0, var$1);
 			} /*finally*/ {
 				in->close();
 			}
@@ -1359,8 +1315,7 @@ void LogManager::updateConfiguration($InputStream* ins, $Function* mapper) {
 	$var($Properties, next, $new($Properties));
 	try {
 		next->load(ins);
-	} catch ($IllegalArgumentException&) {
-		$var($IllegalArgumentException, x, $catch());
+	} catch ($IllegalArgumentException& x) {
 		$throwNew($IOException, $(x->getMessage()), x);
 	}
 	if (this->globalHandlersState == LogManager::STATE_SHUTDOWN) {
@@ -1425,7 +1380,7 @@ void LogManager::updateConfiguration($InputStream* ins, $Function* mapper) {
 									if (mod == $LogManager$ModType::SAME) {
 										continue;
 									}
-										$init($LogManager$7);
+									$init($LogManager$7);
 									{
 										$var($Level, level, nullptr)
 										$var($List, hdls, nullptr)
@@ -1480,8 +1435,7 @@ void LogManager::updateConfiguration($InputStream* ins, $Function* mapper) {
 													try {
 														closeHandlers(this->rootLogger);
 														this->globalHandlersState = LogManager::STATE_UNINITIALIZED;
-													} catch ($Throwable&) {
-														$var($Throwable, t, $catch());
+													} catch ($Throwable& t) {
 														this->globalHandlersState = LogManager::STATE_INITIALIZED;
 														$throw(t);
 													}
@@ -1520,8 +1474,8 @@ void LogManager::updateConfiguration($InputStream* ins, $Function* mapper) {
 					}
 				}
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$5) {
+			$assign(var$0, var$5);
 		} $finally: {
 			$nc(this->configurationLock)->unlock();
 			visited->clear();
@@ -1578,8 +1532,7 @@ int32_t LogManager::getIntProperty($String* name, int32_t defaultValue) {
 	}
 	try {
 		return $Integer::parseInt($($nc(val)->trim()));
-	} catch ($Exception&) {
-		$var($Exception, ex, $catch());
+	} catch ($Exception& ex) {
 		return defaultValue;
 	}
 	$shouldNotReachHere();
@@ -1593,8 +1546,7 @@ int64_t LogManager::getLongProperty($String* name, int64_t defaultValue) {
 	}
 	try {
 		return $Long::parseLong($($nc(val)->trim()));
-	} catch ($Exception&) {
-		$var($Exception, ex, $catch());
+	} catch ($Exception& ex) {
 		return defaultValue;
 	}
 	$shouldNotReachHere();
@@ -1637,8 +1589,7 @@ $Filter* LogManager::getFilterProperty($String* name, $Filter* defaultValue) {
 			$var($Object, o, $nc($nc($($ClassLoader::getSystemClassLoader()))->loadClass(val))->newInstance());
 			return $cast($Filter, o);
 		}
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& ex) {
 	}
 	return defaultValue;
 }
@@ -1652,8 +1603,7 @@ $Formatter* LogManager::getFormatterProperty($String* name, $Formatter* defaultV
 			$var($Object, o, $nc($nc($($ClassLoader::getSystemClassLoader()))->loadClass(val))->newInstance());
 			return $cast($Formatter, o);
 		}
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& ex) {
 	}
 	return defaultValue;
 }
@@ -1678,8 +1628,8 @@ void LogManager::initializeGlobalHandlers() {
 				$var($Throwable, var$2, nullptr);
 				try {
 					loadLoggerHandlers(this->rootLogger, nullptr, "handlers"_s);
-				} catch ($Throwable&) {
-					$assign(var$2, $catch());
+				} catch ($Throwable& var$3) {
+					$assign(var$2, var$3);
 				} /*finally*/ {
 					this->globalHandlersState = LogManager::STATE_INITIALIZED;
 				}
@@ -1687,8 +1637,8 @@ void LogManager::initializeGlobalHandlers() {
 					$throw(var$2);
 				}
 			}
-		} catch ($Throwable&) {
-			$assign(var$0, $catch());
+		} catch ($Throwable& var$4) {
+			$assign(var$0, var$4);
 		} $finally: {
 			$nc(this->configurationLock)->unlock();
 		}
@@ -1724,7 +1674,6 @@ void LogManager::setLevelsOnExistingLoggers() {
 		$var($String, name, key->substring(0, ix));
 		$var($Level, level, getLevelProperty(key, nullptr));
 		if (level == nullptr) {
-			$init($System);
 			$nc($System::err)->println($$str({"Bad level value for property: "_s, key}));
 			continue;
 		}
@@ -1782,18 +1731,15 @@ void LogManager::invokeConfigurationListeners() {
 			{
 				try {
 					$nc(c)->run();
-				} catch ($ThreadDeath&) {
-					$var($ThreadDeath, death, $catch());
+				} catch ($ThreadDeath& death) {
 					$throw(death);
-				} catch ($Error&) {
-					$var($Throwable, x, $catch());
+				} catch ($Error& x) {
 					if (t == nullptr) {
 						$assign(t, x);
 					} else {
 						$nc(t)->addSuppressed(x);
 					}
-				} catch ($RuntimeException&) {
-					$var($Throwable, x, $catch());
+				} catch ($RuntimeException& x) {
 					if (t == nullptr) {
 						$assign(t, x);
 					} else {

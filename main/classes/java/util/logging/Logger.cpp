@@ -1,30 +1,15 @@
 #include <java/util/logging/Logger.h>
 
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/InternalError.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Module.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/StringBuilder.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
 #include <java/lang/ref/WeakReference.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/AccessController.h>
 #include <java/security/PrivilegedAction.h>
 #include <java/util/ArrayList.h>
@@ -340,9 +325,7 @@ $String* Logger::SYSTEM_LOGGER_RB_NAME = nullptr;
 $Logger$LoggerBundle* Logger::SYSTEM_BUNDLE = nullptr;
 $Logger$LoggerBundle* Logger::NO_RESOURCE_BUNDLE = nullptr;
 $Object* Logger::treeLock = nullptr;
-
 $String* Logger::GLOBAL_LOGGER_NAME = nullptr;
-
 Logger* Logger::global = nullptr;
 
 Logger* Logger::getGlobal() {
@@ -980,8 +963,7 @@ $ResourceBundle* Logger::findResourceBundle($String* name, bool useCallersModule
 				$set(this, catalogName, name);
 				$set(this, catalogLocale, currentLocale);
 				return catalog;
-			} catch ($MissingResourceException&) {
-				$var($MissingResourceException, ex, $catch());
+			} catch ($MissingResourceException& ex) {
 				if (useCallersModule && callerModule != nullptr) {
 					try {
 						$var($PrivilegedAction, getModuleClassLoader, static_cast<$PrivilegedAction*>($new(Logger$$Lambda$lambda$findResourceBundle$0, callerModule)));
@@ -994,8 +976,7 @@ $ResourceBundle* Logger::findResourceBundle($String* name, bool useCallersModule
 						$set(this, catalogName, name);
 						$set(this, catalogLocale, currentLocale);
 						return catalog;
-					} catch ($MissingResourceException&) {
-						$var($MissingResourceException, x, $catch());
+					} catch ($MissingResourceException& x) {
 						return nullptr;
 					}
 				} else {
@@ -1010,8 +991,7 @@ $ResourceBundle* Logger::findResourceBundle($String* name, bool useCallersModule
 				$set(this, catalogName, name);
 				$set(this, catalogLocale, currentLocale);
 				return catalog;
-			} catch ($MissingResourceException&) {
-				$var($MissingResourceException, ex, $catch());
+			} catch ($MissingResourceException& ex) {
 				return nullptr;
 			}
 		}

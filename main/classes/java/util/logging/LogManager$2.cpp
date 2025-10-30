@@ -1,15 +1,6 @@
 #include <java/util/logging/LogManager$2.h>
 
 #include <java/lang/AssertionError.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/EnclosingMethodInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/logging/Level.h>
 #include <java/util/logging/LogManager$RootLogger.h>
 #include <java/util/logging/LogManager.h>
@@ -91,7 +82,7 @@ $Object* LogManager$2::run() {
 	if (!LogManager$2::$assertionsDisabled && !(this->this$0->initializedCalled && !this->this$0->initializationDone)) {
 		$throwNew($AssertionError);
 	}
-	$var($Logger, root, $assignField($nc(this->val$owner), rootLogger, $new($LogManager$RootLogger, static_cast<$LogManager*>($nc(this->val$owner)))));
+	$var($Logger, root, $set($nc(this->val$owner), rootLogger, $new($LogManager$RootLogger, static_cast<$LogManager*>($nc(this->val$owner)))));
 	$nc(this->val$owner)->readPrimordialConfiguration();
 	$nc(this->val$owner)->addLogger(root);
 	if (!$nc(root)->isLevelInitialized()) {

@@ -6,23 +6,8 @@
 #include <java/io/FilterOutputStream.h>
 #include <java/io/IOException.h>
 #include <java/io/OutputStream.h>
-#include <java/lang/Array.h>
 #include <java/lang/AssertionError.h>
-#include <java/lang/Character.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/SecurityException.h>
-#include <java/lang/String.h>
-#include <java/lang/StringBuilder.h>
-#include <java/lang/System.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/nio/channels/FileChannel.h>
 #include <java/nio/channels/FileLock.h>
 #include <java/nio/channels/OverlappingFileLockException.h>
@@ -222,12 +207,10 @@ void FileHandler::configure() {
 	}
 	try {
 		setEncoding($(manager->getStringProperty($$str({cname, ".encoding"_s}), nullptr)));
-	} catch ($Exception&) {
-		$var($Exception, ex, $catch());
+	} catch ($Exception& ex) {
 		try {
 			setEncoding(nullptr);
-		} catch ($Exception&) {
-			$catch();
+		} catch ($Exception& ex2) {
 		}
 	}
 }
@@ -349,14 +332,13 @@ void FileHandler::openFiles() {
 			bool fileCreated = false;
 			while (channel == nullptr && retries++ < 1) {
 				try {
-						$init($StandardOpenOption);
+					$init($StandardOpenOption);
 					$assign(channel, $FileChannel::open(lockFilePath, $$new($OpenOptionArray, {
 						static_cast<$OpenOption*>($StandardOpenOption::CREATE_NEW),
 						static_cast<$OpenOption*>($StandardOpenOption::WRITE)
 					})));
 					fileCreated = true;
-				} catch ($AccessDeniedException&) {
-					$var($AccessDeniedException, ade, $catch());
+				} catch ($AccessDeniedException& ade) {
 					$init($LinkOption);
 					bool var$0 = $Files::isRegularFile(lockFilePath, $$new($LinkOptionArray, {$LinkOption::NOFOLLOW_LINKS}));
 					if (var$0 && isParentWritable(lockFilePath)) {
@@ -364,22 +346,19 @@ void FileHandler::openFiles() {
 					} else {
 						$throw(ade);
 					}
-				} catch ($FileAlreadyExistsException&) {
-					$var($FileAlreadyExistsException, ix, $catch());
+				} catch ($FileAlreadyExistsException& ix) {
 					$init($LinkOption);
 					bool var$1 = $Files::isRegularFile(lockFilePath, $$new($LinkOptionArray, {$LinkOption::NOFOLLOW_LINKS}));
 					if (var$1 && isParentWritable(lockFilePath)) {
 						try {
-								$init($StandardOpenOption);
+							$init($StandardOpenOption);
 							$assign(channel, $FileChannel::open(lockFilePath, $$new($OpenOptionArray, {
 								static_cast<$OpenOption*>($StandardOpenOption::WRITE),
 								static_cast<$OpenOption*>($StandardOpenOption::APPEND)
 							})));
-						} catch ($NoSuchFileException&) {
-							$var($NoSuchFileException, x, $catch());
+						} catch ($NoSuchFileException& x) {
 							continue;
-						} catch ($IOException&) {
-							$var($IOException, x, $catch());
+						} catch ($IOException& x) {
 							break;
 						}
 					} else {
@@ -394,11 +373,9 @@ void FileHandler::openFiles() {
 			bool available = false;
 			try {
 				available = $nc(this->lockFileChannel)->tryLock() != nullptr;
-			} catch ($IOException&) {
-				$var($IOException, ix, $catch());
+			} catch ($IOException& ix) {
 				available = fileCreated;
-			} catch ($OverlappingFileLockException&) {
-				$var($OverlappingFileLockException, x, $catch());
+			} catch ($OverlappingFileLockException& x) {
 				available = false;
 			}
 			if (available) {
@@ -541,8 +518,7 @@ void FileHandler::rotate() {
 		}
 		try {
 			open($nc(this->files)->get(0), false);
-		} catch ($IOException&) {
-			$var($IOException, ix, $catch());
+		} catch ($IOException& ix) {
 			reportError(nullptr, ix, $ErrorManager::OPEN_FAILURE);
 		}
 		setLevel(oldLevel);
@@ -571,8 +547,7 @@ void FileHandler::close() {
 		}
 		try {
 			$nc(this->lockFileChannel)->close();
-		} catch ($Exception&) {
-			$catch();
+		} catch ($Exception& ex) {
 		}
 		$synchronized(FileHandler::locks) {
 			$nc(FileHandler::locks)->remove(this->lockFileName);

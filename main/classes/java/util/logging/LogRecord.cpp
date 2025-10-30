@@ -7,32 +7,15 @@
 #include <java/io/ObjectOutputStream.h>
 #include <java/io/ObjectStreamField.h>
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/Long.h>
 #include <java/lang/Math.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NamedAttribute.h>
 #include <java/lang/NegativeArraySizeException.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/StackWalker$StackFrame.h>
-#include <java/lang/String.h>
-#include <java/lang/Thread.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/Void.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/time/Instant.h>
 #include <java/util/AbstractList.h>
 #include <java/util/ArrayList.h>
@@ -245,7 +228,6 @@ $Object* allocate$LogRecord($Class* clazz) {
 }
 
 $AtomicLong* LogRecord::globalSequenceNumber = nullptr;
-
 $ObjectStreamFieldArray* LogRecord::serialPersistentFields = nullptr;
 
 int32_t LogRecord::shortThreadID(int64_t id) {
@@ -480,8 +462,7 @@ void LogRecord::readObject($ObjectInputStream* in) {
 			$var($Locale, var$1, $Locale::getDefault());
 			$var($ResourceBundle, bundle, $ResourceBundle::getBundle(var$0, var$1, $($ClassLoader::getSystemClassLoader())));
 			$set(this, resourceBundle, bundle);
-		} catch ($MissingResourceException&) {
-			$var($MissingResourceException, ex, $catch());
+		} catch ($MissingResourceException& ex) {
 			$set(this, resourceBundle, nullptr);
 		}
 	}
@@ -504,11 +485,9 @@ void LogRecord::lambda$inferCaller$0($StackWalker$StackFrame* f) {
 void clinit$LogRecord($Class* class$) {
 	$useLocalCurrentObjectStackCache();
 	$assignStatic(LogRecord::globalSequenceNumber, $new($AtomicLong));
-		$load($Level);
-		$init($Long);
-		$load($String);
-		$init($Integer);
-		$load($Throwable);
+	$load($Level);
+	$init($Long);
+	$init($Integer);
 	$assignStatic(LogRecord::serialPersistentFields, $new($ObjectStreamFieldArray, {
 		$$new($ObjectStreamField, "level"_s, $Level::class$),
 		$$new($ObjectStreamField, "sequenceNumber"_s, $Long::TYPE),

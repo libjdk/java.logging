@@ -1,26 +1,13 @@
 #include <java/util/logging/Level.h>
 
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/Integer.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/Module.h>
-#include <java/lang/NullPointerException.h>
 #include <java/lang/NumberFormatException.h>
-#include <java/lang/String.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/Locale.h>
 #include <java/util/Optional.h>
 #include <java/util/ResourceBundle.h>
@@ -207,23 +194,14 @@ $Object* allocate$Level($Class* clazz) {
 }
 
 $String* Level::defaultBundle = nullptr;
-
 Level* Level::OFF = nullptr;
-
 Level* Level::SEVERE = nullptr;
-
 Level* Level::WARNING = nullptr;
-
 Level* Level::INFO = nullptr;
-
 Level* Level::CONFIG = nullptr;
-
 Level* Level::FINE = nullptr;
-
 Level* Level::FINER = nullptr;
-
 Level* Level::FINEST = nullptr;
-
 Level* Level::ALL = nullptr;
 $LevelArray* Level::standardLevels = nullptr;
 
@@ -306,8 +284,7 @@ $String* Level::getLocalizedLevelName() {
 		$var($Locale, newLocale, $Locale::getDefault());
 		try {
 			$set(this, localizedLevelName, computeLocalizedLevelName(newLocale));
-		} catch ($Exception&) {
-			$var($Exception, ex, $catch());
+		} catch ($Exception& ex) {
 			$set(this, localizedLevelName, this->name);
 		}
 		$set(this, cachedLocale, newLocale);
@@ -334,8 +311,7 @@ Level* Level::findLevel($String* name) {
 		}
 		$var(Level, levelObject, $new(Level, name, x));
 		return $cast(Level, $nc($($Level$KnownLevel::findByValue(x, static_cast<$Function*>($$new(Level$$Lambda$mirrored)))))->get());
-	} catch ($NumberFormatException&) {
-		$catch();
+	} catch ($NumberFormatException& ex) {
 	}
 	$assign(level, $Level$KnownLevel::findByLocalizedLevelName(name, static_cast<$Function*>($$new(Level$$Lambda$mirrored))));
 	if ($nc(level)->isPresent()) {
@@ -379,8 +355,7 @@ Level* Level::parse($String* name) {
 			}
 			$var(Level, levelObject, $new(Level, name, x));
 			return $cast(Level, $nc($($Level$KnownLevel::findByValue(x, static_cast<$Function*>($$new(Level$$Lambda$referent$1)))))->get());
-		} catch ($NumberFormatException&) {
-			$catch();
+		} catch ($NumberFormatException& ex) {
 		}
 		$assign(level, $Level$KnownLevel::findByLocalizedLevelName(name, static_cast<$Function*>($$new(Level$$Lambda$referent$1))));
 		if ($nc(level)->isPresent()) {
@@ -391,12 +366,10 @@ Level* Level::parse($String* name) {
 }
 
 bool Level::equals(Object$* ox) {
-	$useLocalCurrentObjectStackCache();
 	try {
 		$var(Level, lx, $cast(Level, ox));
 		return ($nc(lx)->value == this->value);
-	} catch ($Exception&) {
-		$var($Exception, ex, $catch());
+	} catch ($Exception& ex) {
 		return false;
 	}
 	$shouldNotReachHere();

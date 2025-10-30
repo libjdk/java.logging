@@ -1,15 +1,5 @@
 #include <java/util/logging/ErrorManager.h>
 
-#include <java/io/PrintStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <jcpp.h>
 
 #undef CLOSE_FAILURE
@@ -74,7 +64,6 @@ void ErrorManager::error($String* msg, $Exception* ex, int32_t code) {
 		if (msg != nullptr) {
 			$assign(text, $str({text, ": "_s, msg}));
 		}
-		$init($System);
 		$nc($System::err)->println(text);
 		if (ex != nullptr) {
 			ex->printStackTrace();

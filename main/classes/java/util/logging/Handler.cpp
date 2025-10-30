@@ -1,19 +1,6 @@
 #include <java/util/logging/Handler.h>
 
-#include <java/io/PrintStream.h>
 #include <java/io/UnsupportedEncodingException.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/nio/charset/Charset.h>
 #include <java/nio/charset/IllegalCharsetNameException.h>
 #include <java/security/AccessControlContext.h>
@@ -162,8 +149,7 @@ void Handler::setEncoding($String* encoding) {
 				if (!$Charset::isSupported(encoding)) {
 					$throwNew($UnsupportedEncodingException, encoding);
 				}
-			} catch ($IllegalCharsetNameException&) {
-				$var($IllegalCharsetNameException, e, $catch());
+			} catch ($IllegalCharsetNameException& e) {
 				$throwNew($UnsupportedEncodingException, encoding);
 			}
 		}
@@ -204,9 +190,7 @@ $ErrorManager* Handler::getErrorManager() {
 void Handler::reportError($String* msg, $Exception* ex, int32_t code) {
 	try {
 		$nc(this->errorManager)->error(msg, ex, code);
-	} catch ($Exception&) {
-		$var($Exception, ex2, $catch());
-		$init($System);
+	} catch ($Exception& ex2) {
 		$nc($System::err)->println("Handler.reportError caught:"_s);
 		ex2->printStackTrace();
 	}

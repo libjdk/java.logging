@@ -4,18 +4,7 @@
 #include <java/io/OutputStreamWriter.h>
 #include <java/io/UnsupportedEncodingException.h>
 #include <java/io/Writer.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/Error.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/NullPointerException.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/security/AccessControlContext.h>
 #include <java/security/AccessController.h>
 #include <java/security/Permission.h>
@@ -143,8 +132,7 @@ void StreamHandler::setOutputStream($OutputStream* out) {
 		} else {
 			try {
 				$set(this, writer, $new($OutputStreamWriter, this->output, encoding));
-			} catch ($UnsupportedEncodingException&) {
-				$var($UnsupportedEncodingException, ex, $catch());
+			} catch ($UnsupportedEncodingException& ex) {
 				$throwNew($Error, $$str({"Unexpected exception "_s, ex}));
 			}
 		}
@@ -175,8 +163,7 @@ void StreamHandler::publish($LogRecord* record) {
 		$var($String, msg, nullptr);
 		try {
 			$assign(msg, $nc($(getFormatter()))->format(record));
-		} catch ($Exception&) {
-			$var($Exception, ex, $catch());
+		} catch ($Exception& ex) {
 			reportError(nullptr, ex, $ErrorManager::FORMAT_FAILURE);
 			return;
 		}
@@ -186,8 +173,7 @@ void StreamHandler::publish($LogRecord* record) {
 				this->doneHeader = true;
 			}
 			$nc(this->writer)->write(msg);
-		} catch ($Exception&) {
-			$var($Exception, ex, $catch());
+		} catch ($Exception& ex) {
 			reportError(nullptr, ex, $ErrorManager::WRITE_FAILURE);
 		}
 	}
@@ -205,8 +191,7 @@ void StreamHandler::flush() {
 		if (this->writer != nullptr) {
 			try {
 				$nc(this->writer)->flush();
-			} catch ($Exception&) {
-				$var($Exception, ex, $catch());
+			} catch ($Exception& ex) {
 				reportError(nullptr, ex, $ErrorManager::FLUSH_FAILURE);
 			}
 		}
@@ -226,8 +211,7 @@ void StreamHandler::flushAndClose() {
 				$nc(this->writer)->write($($nc($(getFormatter()))->getTail(this)));
 				$nc(this->writer)->flush();
 				$nc(this->writer)->close();
-			} catch ($Exception&) {
-				$var($Exception, ex, $catch());
+			} catch ($Exception& ex) {
 				reportError(nullptr, ex, $ErrorManager::CLOSE_FAILURE);
 			}
 			$set(this, writer, nullptr);

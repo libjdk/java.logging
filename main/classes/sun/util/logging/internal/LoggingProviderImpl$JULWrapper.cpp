@@ -1,24 +1,13 @@
 #include <sun/util/logging/internal/LoggingProviderImpl$JULWrapper.h>
 
 #include <java/io/Serializable.h>
-#include <java/lang/Array.h>
 #include <java/lang/AssertionError.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/IllegalArgumentException.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
 #include <java/lang/System$Logger$Level.h>
-#include <java/lang/Throwable.h>
 #include <java/lang/invoke/CallSite.h>
 #include <java/lang/invoke/LambdaMetafactory.h>
 #include <java/lang/invoke/MethodHandle.h>
 #include <java/lang/invoke/MethodHandles$Lookup.h>
 #include <java/lang/invoke/MethodType.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/Objects.h>
 #include <java/util/ResourceBundle.h>
 #include <java/util/function/Supplier.h>
@@ -341,8 +330,7 @@ $PlatformLogger$Level* LoggingProviderImpl$JULWrapper::getPlatformLevel() {
 	}
 	try {
 		return $PlatformLogger$Level::valueOf($($nc(javaLevel)->getName()));
-	} catch ($IllegalArgumentException&) {
-		$var($IllegalArgumentException, e, $catch());
+	} catch ($IllegalArgumentException& e) {
 		return $PlatformLogger$Level::valueOf($nc(javaLevel)->intValue());
 	}
 	$shouldNotReachHere();
@@ -392,7 +380,7 @@ $String* LoggingProviderImpl$JULWrapper::lambda$log$0(Object$* obj) {
 void clinit$LoggingProviderImpl$JULWrapper($Class* class$) {
 	$load($LoggingProviderImpl);
 	LoggingProviderImpl$JULWrapper::$assertionsDisabled = !$LoggingProviderImpl::class$->desiredAssertionStatus();
-		$init($Level);
+	$init($Level);
 	$assignStatic(LoggingProviderImpl$JULWrapper::spi2JulLevelMapping, $new($LevelArray, {
 		$Level::ALL,
 		$Level::FINER,

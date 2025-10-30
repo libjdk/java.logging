@@ -2,18 +2,7 @@
 
 #include <java/lang/AbstractStringBuilder.h>
 #include <java/lang/Appendable.h>
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/MethodInfo.h>
 #include <java/lang/StackTraceElement.h>
-#include <java/lang/String.h>
-#include <java/lang/StringBuilder.h>
-#include <java/lang/Throwable.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/nio/charset/Charset.h>
 #include <java/time/Instant.h>
 #include <java/time/format/DateTimeFormatter.h>
@@ -206,8 +195,7 @@ $String* XMLFormatter::format($LogRecord* record) {
 			escape(sb, $(record->getResourceBundleName()));
 			sb->append("</catalog>\n"_s);
 		}
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& ex) {
 	}
 	$var($ObjectArray, parameters, record->getParameters());
 	if (parameters != nullptr && parameters->length != 0 && $nc($(record->getMessage()))->indexOf((int32_t)u'{') == -1) {
@@ -221,8 +209,7 @@ $String* XMLFormatter::format($LogRecord* record) {
 					sb->append("  <param>"_s);
 					try {
 						escape(sb, $($nc($of(parameter))->toString()));
-					} catch ($Exception&) {
-						$var($Exception, ex, $catch());
+					} catch ($Exception& ex) {
 						sb->append("???"_s);
 					}
 					sb->append("</param>\n"_s);
@@ -282,8 +269,7 @@ $String* XMLFormatter::getHead($Handler* h) {
 	try {
 		$var($Charset, cs, $Charset::forName(encoding));
 		$assign(encoding, $nc(cs)->name());
-	} catch ($Exception&) {
-		$catch();
+	} catch ($Exception& ex) {
 	}
 	sb->append(" encoding=\""_s);
 	sb->append(encoding);

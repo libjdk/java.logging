@@ -1,12 +1,5 @@
 #include <java/util/logging/Filter.h>
 
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/CompoundAttribute.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/logging/LogRecord.h>
 #include <jcpp.h>
 
@@ -18,11 +11,11 @@ using $LogRecord = ::java::util::logging::LogRecord;
 namespace java {
 	namespace util {
 		namespace logging {
+
 $CompoundAttribute _Filter_Annotations_[] = {
 	{"Ljava/lang/FunctionalInterface;", nullptr},
 	{}
 };
-
 
 $MethodInfo _Filter_MethodInfo_[] = {
 	{"isLoggable", "(Ljava/util/logging/LogRecord;)Z", nullptr, $PUBLIC | $ABSTRACT},

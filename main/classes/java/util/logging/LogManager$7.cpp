@@ -1,15 +1,6 @@
 #include <java/util/logging/LogManager$7.h>
 
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/EnclosingMethodInfo.h>
-#include <java/lang/FieldInfo.h>
-#include <java/lang/InnerClassInfo.h>
 #include <java/lang/NoSuchFieldError.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/logging/LogManager$ConfigProperty.h>
 #include <java/util/logging/LogManager.h>
 #include <jcpp.h>
@@ -75,18 +66,15 @@ void clinit$LogManager$7($Class* class$) {
 	{
 		try {
 			$nc(LogManager$7::$SwitchMap$java$util$logging$LogManager$ConfigProperty)->set($LogManager$ConfigProperty::LEVEL->ordinal(), 1);
-		} catch ($NoSuchFieldError&) {
-			$catch();
+		} catch ($NoSuchFieldError& ex) {
 		}
 		try {
 			$nc(LogManager$7::$SwitchMap$java$util$logging$LogManager$ConfigProperty)->set($LogManager$ConfigProperty::USEPARENT->ordinal(), 2);
-		} catch ($NoSuchFieldError&) {
-			$catch();
+		} catch ($NoSuchFieldError& ex) {
 		}
 		try {
 			$nc(LogManager$7::$SwitchMap$java$util$logging$LogManager$ConfigProperty)->set($LogManager$ConfigProperty::HANDLERS->ordinal(), 3);
-		} catch ($NoSuchFieldError&) {
-			$catch();
+		} catch ($NoSuchFieldError& ex) {
 		}
 	}
 }

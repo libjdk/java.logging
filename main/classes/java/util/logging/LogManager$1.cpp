@@ -1,19 +1,7 @@
 #include <java/util/logging/LogManager$1.h>
 
-#include <java/io/PrintStream.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
 #include <java/lang/ClassLoader.h>
 #include <java/lang/ClassNotFoundException.h>
-#include <java/lang/EnclosingMethodInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/InnerClassInfo.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/System.h>
-#include <java/lang/Thread.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/util/logging/LogManager.h>
 #include <jcpp.h>
 
@@ -83,15 +71,12 @@ $Object* LogManager$1::run() {
 			try {
 				$var($Object, tmp, $nc($nc($($ClassLoader::getSystemClassLoader()))->loadClass(cname))->newInstance());
 				$assign(mgr, $cast($LogManager, tmp));
-			} catch ($ClassNotFoundException&) {
-				$var($ClassNotFoundException, ex, $catch());
+			} catch ($ClassNotFoundException& ex) {
 				$var($Object, tmp, $nc($nc($($($Thread::currentThread())->getContextClassLoader()))->loadClass(cname))->newInstance());
 				$assign(mgr, $cast($LogManager, tmp));
 			}
 		}
-	} catch ($Exception&) {
-		$var($Exception, ex, $catch());
-		$init($System);
+	} catch ($Exception& ex) {
 		$nc($System::err)->println($$str({"Could not load Logmanager \""_s, cname, "\""_s}));
 		ex->printStackTrace();
 	}

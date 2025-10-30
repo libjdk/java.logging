@@ -1,13 +1,5 @@
 #include <java/util/logging/Formatter.h>
 
-#include <java/lang/Array.h>
-#include <java/lang/Class.h>
-#include <java/lang/ClassInfo.h>
-#include <java/lang/Exception.h>
-#include <java/lang/MethodInfo.h>
-#include <java/lang/String.h>
-#include <java/lang/reflect/Constructor.h>
-#include <java/lang/reflect/Method.h>
 #include <java/text/MessageFormat.h>
 #include <java/util/MissingResourceException.h>
 #include <java/util/ResourceBundle.h>
@@ -68,8 +60,7 @@ $String* Formatter::formatMessage($LogRecord* record) {
 	if (catalog != nullptr) {
 		try {
 			$assign(format, catalog->getString(format));
-		} catch ($MissingResourceException&) {
-			$catch();
+		} catch ($MissingResourceException& ex) {
 		}
 	}
 	try {
@@ -89,8 +80,7 @@ $String* Formatter::formatMessage($LogRecord* record) {
 			}
 		}
 		return format;
-	} catch ($Exception&) {
-		$var($Exception, ex, $catch());
+	} catch ($Exception& ex) {
 		return format;
 	}
 	$shouldNotReachHere();
