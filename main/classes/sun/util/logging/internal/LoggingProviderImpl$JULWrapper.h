@@ -53,7 +53,6 @@ class LoggingProviderImpl$JULWrapper : public ::sun::util::logging::PlatformLogg
 	$class(LoggingProviderImpl$JULWrapper, 0, ::sun::util::logging::PlatformLogger$ConfigurableBridge$LoggerConfiguration, ::java::lang::System$Logger, ::sun::util::logging::PlatformLogger$Bridge, ::sun::util::logging::PlatformLogger$ConfigurableBridge)
 public:
 	LoggingProviderImpl$JULWrapper();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual void finalize() override;
 	void init$(::java::util::logging::Logger* logger);

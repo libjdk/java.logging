@@ -32,7 +32,6 @@ class LogManager$LoggingProviderAccess : public ::sun::util::logging::internal::
 	$class(LogManager$LoggingProviderAccess, 0, ::sun::util::logging::internal::LoggingProviderImpl$LogManagerAccess, ::java::security::PrivilegedAction)
 public:
 	LogManager$LoggingProviderAccess();
-	virtual ::java::lang::Object0* toObject0$() const override {return (::java::lang::Object0*)(void*)this;}
 	virtual $Object* clone() override;
 	virtual bool equals(Object$* arg0) override;
 	virtual void finalize() override;
